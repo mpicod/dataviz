@@ -1,0 +1,75 @@
+<html>
+ <head>
+     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+ </head>
+ <body>
+   <canvas id="canvas" width="1920" height="1080"></canvas>
+   <script type="application/x-javascript">
+
+    let events =[];
+    let floods = [];
+
+    fetch('data.json').then(response => {
+    return response.json();
+    }).then(data => {
+        data.map(event => events.push(event))
+        console.log(events)
+        events.forEach(element => {
+            if (element['Entity'] == 'Flood') {
+                floods.push(element)
+            }
+        })
+        
+    })  
+        .then(draw())
+        .catch(err => {
+            // Do something for an error here
+    });
+
+
+    function draw() {
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    const circleDiameter = 100;
+    ctx.beginPath();
+    ctx.strokeStyle = '#101010';
+    ctx.arc(canvas.width/2, canvas.height/2, circleDiameter, 0, 2 * Math.PI);
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    let length = floods.length;
+
+    for (let i = 0; i < floods.length; i++) {
+
+        const step = i / length;
+        const angle = step * Math.PI * 2;
+        let power = floods[i].Numbers;
+        
+        let x1 = (canvas.width/2 + Math.cos(angle)*(circleDiameter*1.1));
+        let y1 = (canvas.height/2 + Math.sin(angle)*(circleDiameter*1.1));
+
+        let x2 = x1 + power * Math.cos(angle)*2;
+        let y2 = y1 + power * Math.sin(angle)*2;
+
+        ctx.beginPath();
+        ctx.moveTo(x1 , y1 );
+        ctx.lineTo(
+            (x2), 
+            (y2));
+        ctx.lineWidth = 5;
+
+        // set line color
+        ctx.strokeStyle = 'hsl(' + i/6 + ', 100%, 50%)';
+        ctx.stroke();
+        }
+        
+    }
+
+
+  </script>
+ </body>
+</html>
+
