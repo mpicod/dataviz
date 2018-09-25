@@ -1,3 +1,15 @@
+floods = [];
+epidemic = [];
+earthquake = [];
+drought = [];
+temperature = [];
+weather = [];
+landslide = [];
+volcans = [];
+dry = [];
+wildfire = [];
+events = [];
+
 class Rectangle {
     constructor(x1, y1, x2, y2){
         this.x1 = x1;
@@ -41,3 +53,48 @@ function setupCanvas(){
   setupCanvas();
 
 
+//////// GET DATAS ///////
+fetch('deaths.json').then(response => {
+    return response.json();
+    }).then(data => {
+        data.map(event => events.push(event))
+        console.log(events)
+        events.forEach(element => {
+
+            if (element['Entity'] == 'Flood') {
+                floods.push(element)
+            }
+            else if (element['Entity'] == 'Epidemic') {
+                epidemic.push(element)
+            }
+            else if (element['Entity'] == 'Earthquake') {
+                earthquake.push(element)
+            }
+            else if (element['Entity'] == 'Drought') {
+                drought.push(element)
+            }
+            else if (element['Entity'] == 'Extreme Temperature') {
+                temperature.push(element)
+            }
+            else if (element['Entity'] == 'Extreme Weather') {
+                weather.push(element)
+            }
+            else if (element['Entity'] == 'Landslide') {
+                landslide.push(element)
+            }
+            else if (element['Entity'] == 'Volcanic Activity') {
+                volcans.push(element)
+            }
+            else if (element['Entity'] == 'Dry') {
+                dry.push(element)
+            }
+            else if (element['Entity'] == 'Wildfire') {
+                wildfire.push(element)
+            }
+        })
+    
+})  
+    .then(draw())
+    .catch(err => {
+        // Do something for an error here
+});
