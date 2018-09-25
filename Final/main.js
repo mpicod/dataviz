@@ -6,3 +6,38 @@ class Rectangle {
         this.y2 = y2;
     }
 }
+
+
+const canvas = document.querySelector('#canvas');
+const ctx = canvas.getContext('2d');
+
+const resizeCanvas = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    console.log(window.devicePixelRatio)
+}
+
+function draw () {
+    ctx.fillStyle = "green";
+    ctx.fillRect(10, 10, 100, 100);
+  }
+function setupCanvas(){
+    // Get the device pixel ratio, falling back to 1.
+    let dpr = window.devicePixelRatio || 1;
+    // Get the size of the canvas in CSS pixels.
+    let rect = canvas.getBoundingClientRect();
+    // Give the canvas pixel dimensions of their CSS
+    // size * the device pixel ratio.
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    
+    // Scale all drawing operations by the dpr, so you
+    // don't have to worry about the difference.
+    ctx.scale(dpr, dpr);
+    draw();
+    return ctx;
+  }
+  window.addEventListener('resize', setupCanvas);
+  setupCanvas();
+
+
