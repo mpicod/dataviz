@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.data-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.data{
+    font-family: sans-serif;
+    font-weight: 400;
+    padding: 2%;
+    border: 3px solid salmon;
+    border-radius: 5px;
+}
+span{
+    font-weight: 600;
+}
+
+/* // function onResize() {
+    //     width = window.innerWidth;
+    //     height = window.innerHeight;
+    //     canvas.width = width * 2;
+    //     canvas.height = height * 2;
+    //     canvas.style.width = width + `px`;
+    //     canvas.style.height = height + `px`;
+    //     updateDraw(0);
+    // }
+    // window.addEventListener('resize', onResize); */
