@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Pluto';
+    src: url('fonts/PlutoRegular.woff2') format('woff2'),
+        url('fonts/PlutoRegular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 *{
     margin: 0;
     padding: 0;
@@ -5,8 +14,28 @@
 }
 body{
     background-color: black;
+    font-family: 'Pluto';
+    color: white;
 }
 canvas{
     display: block;
     width: 100%;
+}
+
+div.caption{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+div.caption div div{
+    width: 10px;
+    height: 10px;
+    margin: 3%;
+}
+div.earthquake div{
+    background-color: rgb(16,221,142);
+}
+
+div.earthquake span{
+    background-color: rgb(16,221,142);
 }

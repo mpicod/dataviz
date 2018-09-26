@@ -17,6 +17,9 @@ WildfireArray = [];
 EpidemicArray = [];
 
 events = [];
+catas = [];
+
+let cursor = 50;
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
@@ -39,7 +42,6 @@ class Rectangle {
         
         // ctx.strokeRect(cursor, this.y, this.width, this.height);
         ctx.fillStyle = this.color;
-        console.log(ctx.fillStyle)
         ctx.fillRect(cursor, this.y, this.width, this.height);
         ctx.fill(); 
     }
@@ -51,7 +53,7 @@ class Rectangle {
 const setRectangle = _ => {
     FloodsArray = [];
     floods.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>1 ? el.Deaths/10000 : 1,
+        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
                 y = canvas.height/20,
@@ -66,7 +68,7 @@ const setRectangle = _ => {
     });
     VolcansArray = [];
     volcans.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>1 ? el.Deaths/10000 : 1,
+        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
                 y = canvas.height/20,
@@ -81,7 +83,7 @@ const setRectangle = _ => {
     });
     EarthquakeArray = [];
     earthquake.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>1 ? el.Deaths/10000 : 1,
+        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
                 y = canvas.height/20,
@@ -96,7 +98,7 @@ const setRectangle = _ => {
     });    
     TemperatureArray = [];
     temperature.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>1 ? el.Deaths/10000 : 1,
+        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
                 y = canvas.height/20,
@@ -111,7 +113,7 @@ const setRectangle = _ => {
     });
     WildfireArray = [];
     wildfire.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>1 ? el.Deaths/10000 : 1,
+        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
                 y = canvas.height/20,
@@ -126,8 +128,8 @@ const setRectangle = _ => {
     });
     EpidemicArray = [];
     epidemic.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>1 ? el.Deaths/10000 : 1,
-                height = canvas.height*0.7/2,
+        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
+                height = el.canvas.height*0.7/2,
                 x = canvas.width/100,
                 y = canvas.height/20,
                 type = el.Entity,
@@ -141,57 +143,80 @@ const setRectangle = _ => {
     });
 }
 function draw(){
+    cursor = 50;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawFloods();
-    drawEarthquake();
-    drawVolcans();
-    drawTemperature();
-    drawWildfire();
-    drawEpidemic();
+    for (let i = 1900; i < 2018; i++) {
+        drawFloods(i);
+        drawEarthquake(i);
+        drawVolcans(i);
+        drawTemperature(i);
+        drawWildfire(i);
+        drawEpidemic(i);
+        console.log(cursor)
+    }
     console.log('DRAW')
 }
 
-function drawFloods(){
-    let cursor = 50;
+function drawFloods(year){
     FloodsArray.forEach(element => {
-        element._trace(cursor);
-        cursor += element.width + 10;
+        let cursor = getCursor(element)
+        if (element.year == year) {
+            element._trace(cursor);
+            addCursor(element);
+        }
     });
 }
-function drawEarthquake() {
-    let cursor = 50;
+function drawEarthquake(year) {
     EarthquakeArray.forEach(element => {
-        element._trace(cursor);
-        cursor += element.width + 10;
+        let cursor = getCursor(element)
+        if (element.year == year) {
+            element._trace(cursor);
+            addCursor(element);
+        }
     })
 }
-function drawVolcans() {
-    let cursor = 50;
+function drawVolcans(year) {
     VolcansArray.forEach(element => {
-        element._trace(cursor);
-        cursor += element.width + 10;
+        let cursor = getCursor(element)
+        if (element.year == year) {
+            element._trace(cursor);
+            addCursor(element);
+        }
     })
 }
-function drawTemperature() {
-    let cursor = 50;
+function drawTemperature(year) {
     TemperatureArray.forEach(element => {
-        element._trace(cursor);
-        cursor += element.width + 10;
+        let cursor = getCursor(element)
+        if (element.year == year) {
+            element._trace(cursor);
+            addCursor(element);
+        }
     })
 }
-function drawWildfire() {
-    let cursor = 50;
+function drawWildfire(year) {
     WildfireArray.forEach(element => {
-        element._trace(cursor);
-        cursor += element.width + 10;
+        let cursor = getCursor(element)
+        if (element.year == year) {
+            element._trace(cursor);
+            addCursor(element);
+        }
     })
 }
-function drawEpidemic() {
-    let cursor = 50;
+function drawEpidemic(year) {
     EpidemicArray.forEach(element => {
-        element._trace(cursor);
-        cursor += element.width + 10;
+        let cursor = getCursor(element)
+        if (element.year == year) {
+            element._trace(cursor);
+            addCursor(element);
+        }
     })
+}
+
+function getCursor(){
+    return cursor
+}
+function addCursor(element){
+    cursor = cursor + element.width + 5;
 }
 
 function setupCanvas(){
@@ -292,6 +317,23 @@ fetch('deaths.json').then(response => {
         }
 
     }
+
+//// GET SECOND DATASET ////
+fetch('catas.json')
+    .then(response => {
+    return response.json();
+    })
+    .then(data => {
+        data.map(cata => catas.push(cata))
+        catas.forEach(element => {
+            console.log(element)
+        })
+    
+})  
+    .catch(err => {
+        // Do something for an error here
+});
+
 function defineshape(s){
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
