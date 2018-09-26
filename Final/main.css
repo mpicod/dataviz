@@ -65,7 +65,17 @@ div.epidemic div{
 .timeline_step{
     color: white;
     position: absolute;
-    left: attr(data-x number);
+    bottom: 115px;
+}
+.timeline_step::before{
+    content: '';
+    width: 2px;
+    height: 30px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    background-color: white;
+    display: block;
 }
 .timeline{
     width: 95vw;

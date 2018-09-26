@@ -142,6 +142,7 @@ const setRectangle = _ => {
         EpidemicArray.push(mesh)
         
     });
+    return
 }
 function draw(){
     cursor = 50;
@@ -305,6 +306,7 @@ fetch('deaths.json').then(response => {
 })  
     .then(() => setRectangle())
     .then(() => draw())
+    .then(() => drawTimeline())
     .catch(err => {
         // Do something for an error here
 });
