@@ -18,6 +18,7 @@ EpidemicArray = [];
 
 events = [];
 catas = [];
+timelineSteps = [];
 
 let cursor = 50;
 
@@ -53,10 +54,10 @@ class Rectangle {
 const setRectangle = _ => {
     FloodsArray = [];
     floods.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
+        let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
-                y = canvas.height/20,
+                y = 0,
                 type = el.Entity,
                 year = el.Year,
                 deaths = el.Deaths,
@@ -68,14 +69,14 @@ const setRectangle = _ => {
     });
     VolcansArray = [];
     volcans.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
+        let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
-                y = canvas.height/20,
+                y = 0,
                 type = el.Entity,
                 year = el.Year,
                 deaths = el.Deaths,
-                color = "rgb(0, 210, 167)";
+                color = "rgb(172, 239, 226)";
 
         const rect = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         VolcansArray.push(rect)
@@ -83,10 +84,10 @@ const setRectangle = _ => {
     });
     EarthquakeArray = [];
     earthquake.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
+        let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
-                y = canvas.height/20,
+                y = 0,
                 type = el.Entity,
                 year = el.Year,
                 deaths = el.Deaths,
@@ -98,10 +99,10 @@ const setRectangle = _ => {
     });    
     TemperatureArray = [];
     temperature.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
+        let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
-                y = canvas.height/20,
+                y = 0,
                 type = el.Entity,
                 year = el.Year,
                 deaths = el.Deaths,
@@ -113,10 +114,10 @@ const setRectangle = _ => {
     });
     WildfireArray = [];
     wildfire.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
+        let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
                 x = canvas.width/100,
-                y = canvas.height/20,
+                y = 0,
                 type = el.Entity,
                 year = el.Year,
                 deaths = el.Deaths,
@@ -128,14 +129,14 @@ const setRectangle = _ => {
     });
     EpidemicArray = [];
     epidemic.forEach((el, i) => {
-        let     width = (el.Deaths/1000)>4 ? el.Deaths/10000 : 4,
+        let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = el.canvas.height*0.7/2,
                 x = canvas.width/100,
-                y = canvas.height/20,
+                y = 0,
                 type = el.Entity,
                 year = el.Year,
                 deaths = el.Deaths,
-                color = "rgb(133,79,186)";
+                color = "rgb(14,79,127)";
 
         const mesh = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         EpidemicArray.push(mesh)
@@ -144,8 +145,11 @@ const setRectangle = _ => {
 }
 function draw(){
     cursor = 50;
+    timelineSteps = [];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 1900; i < 2018; i++) {
+        let step = getCursor();
+        timelineSteps.push({i,step})
         drawFloods(i);
         drawEarthquake(i);
         drawVolcans(i);
@@ -217,6 +221,25 @@ function getCursor(){
 }
 function addCursor(element){
     cursor = cursor + element.width + 5;
+}
+
+function drawTimeline(){
+    const currentDiv = document.querySelector('footer'); 
+    timelineSteps.forEach((time, index) => {
+        // document.write(`<span class="timeline_step" data-X="${time['step']}"></span>`)
+          // crée un nouvel élément div 
+          if (index % 10 == 0) {
+            const newSpan = document.createElement("span"); 
+            newSpan.setAttribute('class', 'timeline_step');
+            newSpan.style.left = `${time['step']}px`;
+            // et lui donne un peu de contenu 
+            var newContent = document.createTextNode(`${time['i']}`); 
+            // ajoute le noeud texte au nouveau div créé
+            newSpan.appendChild(newContent);  
+            // ajoute le nouvel élément créé et son contenu dans le DOM 
+            document.body.insertBefore(newSpan, currentDiv); 
+          }
+    })
 }
 
 function setupCanvas(){
