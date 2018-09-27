@@ -9,12 +9,15 @@ volcans = [];
 dry = [];
 wildfire = [];
 
+
 FloodsArray = [];
 EarthquakeArray = [];
 VolcansArray = [];
 TemperatureArray = [];
 WildfireArray = [];
 EpidemicArray = [];
+
+allEvents = [];
 
 events = [];
 catas = [];
@@ -24,7 +27,7 @@ let cursor = 50;
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-// canvas.addEventListener("mousemove", mouseMove);
+canvas.addEventListener("mousemove", mouseMove);
 
 
 class Rectangle {
@@ -37,11 +40,28 @@ class Rectangle {
         this.color = color;
         this.year = year;
         this.deaths = deaths;
+        this.isHover = false;
         this.i = i;
     }
     _trace(cursor){
-        
+
         // ctx.strokeRect(cursor, this.y, this.width, this.height);
+        this.x = cursor;
+        // let opacity;
+        // if (this.isHover == true) {
+            
+        // }
+        let width;
+        let opacity;
+        if (this.isHover == true) {
+            
+            opacity = 1.0;
+        }else{
+            width = this.width;
+            opacity = 0.6;
+        }
+
+        ctx.globalAlpha = opacity;
         ctx.fillStyle = this.color;
         ctx.fillRect(cursor, this.y, this.width, this.height);
         ctx.fill(); 
@@ -56,7 +76,7 @@ const setRectangle = _ => {
     floods.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
-                x = canvas.width/100,
+                x = undefined,
                 y = 0,
                 type = el.Entity,
                 year = el.Year,
@@ -65,13 +85,14 @@ const setRectangle = _ => {
 
         const rect = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         FloodsArray.push(rect)
+        allEvents.push(FloodsArray)
         
     });
     VolcansArray = [];
     volcans.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
-                x = canvas.width/100,
+                x = undefined,
                 y = 0,
                 type = el.Entity,
                 year = el.Year,
@@ -80,13 +101,14 @@ const setRectangle = _ => {
 
         const rect = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         VolcansArray.push(rect)
+        allEvents.push(VolcansArray)
         
     });
     EarthquakeArray = [];
     earthquake.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
-                x = canvas.width/100,
+                x = undefined,
                 y = 0,
                 type = el.Entity,
                 year = el.Year,
@@ -95,13 +117,14 @@ const setRectangle = _ => {
 
         const mesh = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         EarthquakeArray.push(mesh)
+        allEvents.push(EarthquakeArray)
         
     });    
     TemperatureArray = [];
     temperature.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
-                x = canvas.width/100,
+                x = undefined,
                 y = 0,
                 type = el.Entity,
                 year = el.Year,
@@ -110,13 +133,14 @@ const setRectangle = _ => {
 
         const mesh = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         TemperatureArray.push(mesh)
-        
+        allEvents.push(TemperatureArray)
+
     });
     WildfireArray = [];
     wildfire.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
                 height = canvas.height*0.7/2,
-                x = canvas.width/100,
+                x = undefined,
                 y = 0,
                 type = el.Entity,
                 year = el.Year,
@@ -125,13 +149,14 @@ const setRectangle = _ => {
 
         const mesh = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         WildfireArray.push(mesh)
+        allEvents.push(WildfireArray)
         
     });
     EpidemicArray = [];
     epidemic.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
-                height = el.canvas.height*0.7/2,
-                x = canvas.width/100,
+                height = canvas.height*0.7/2,
+                x = undefined,
                 y = 0,
                 type = el.Entity,
                 year = el.Year,
@@ -140,9 +165,9 @@ const setRectangle = _ => {
 
         const mesh = new Rectangle(x, y, width, height, type, year, deaths, color, i);
         EpidemicArray.push(mesh)
+        allEvents.push(EpidemicArray)
         
     });
-    return
 }
 function draw(){
     cursor = 50;
@@ -157,7 +182,6 @@ function draw(){
         drawTemperature(i);
         drawWildfire(i);
         drawEpidemic(i);
-        console.log(cursor)
     }
     console.log('DRAW')
 }
@@ -244,6 +268,8 @@ function drawTimeline(){
 }
 
 function setupCanvas(){
+    const canvas = document.querySelector('#canvas');
+    const ctx = canvas.getContext('2d');
     // Get the device pixel ratio, falling back to 1.
     let dpr = window.devicePixelRatio || 1;
     // Get the size of the canvas in CSS pixels.
@@ -256,12 +282,10 @@ function setupCanvas(){
     // Scale all drawing operations by the dpr, so you
     // don't have to worry about the difference.
     ctx.scale(dpr, dpr);
-    draw();
+    draw()
     return ctx;
   }
   window.addEventListener('resize', setupCanvas);
-  setupCanvas();
-
 
 //////// GET DATAS ///////
 fetch('deaths.json').then(response => {
@@ -304,69 +328,77 @@ fetch('deaths.json').then(response => {
         })
     
 })  
+    .then(() => setupCanvas())
     .then(() => setRectangle())
     .then(() => draw())
     .then(() => drawTimeline())
-    .catch(err => {
-        // Do something for an error here
-});
+//     .catch(err => {
+//         throw err;
+//         // Do something for an error here
+// });
 
     //////// EVENTS
     function mouseMove(e) {
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        
         console.log('MOVE')
+        canvas.removeEventListener('mousemove', mouseMove);
         let isMouseOver = false
         let mouseX = e.x;
         let mouseY = e.y;
 
-        canvas.removeEventListener('mousemove', mouseMove);
+        const infos = document.querySelector('.infos');
+        infos.style.setProperty('--left-cursor', mouseX + 'px');
+        infos.style.setProperty('--top-cursor', mouseY + 'px');
+        infos.style.display = 'none';
+
+        
         setTimeout(() => {
             canvas.addEventListener('mousemove', mouseMove);
         }, 100);
-
-        for(var i=0;i<FloodsArray.length;i++){
-            defineshape(FloodsArray[i]);
-            console.log(FloodsArray[i])
-            console.log(mouseX, mouseY)
-            if (ctx.isPointInStroke(mouseX/2,mouseY/2) || ctx.isPointInPath(mouseX/2,mouseY/2) ) {
-                console.log('HIIT')
-                FloodsArray[i].isHover = true; 
-                draw()
-                isMouseOver = true;
+        allEvents.forEach(event => {
+            for(var i=0;i<event.length;i++){
+                if (mouseX>= event[i].x && mouseX<= event[i].x + event[i].width) {
+                    console.log('EVENTHIIT')
+                    event[i].isHover = true;
+                    console.log(event[i])
+                    updateData(event[i])
+                }else{
+                    event[i].isHover = false;
+                }
             }
-            
-            // }else{
-            //     FloodsArray[i].isHover = false;
-            // }
-        }
+        });
 
+        // for(var i=0;i<FloodsArray.length;i++){
+        //     if (mouseX>= FloodsArray[i].x && mouseX<= FloodsArray[i].x + FloodsArray[i].width) {
+        //         console.log('FLOODHIIT')
+        //         FloodsArray[i].isHover = true;
+        //     }else{
+        //         FloodsArray[i].isHover = false;
+        //     }
+        // }
+        draw()
     }
 
-//// GET SECOND DATASET ////
-fetch('catas.json')
-    .then(response => {
-    return response.json();
-    })
-    .then(data => {
-        data.map(cata => catas.push(cata))
-        catas.forEach(element => {
-            console.log(element)
-        })
+// //// GET SECOND DATASET ////
+// fetch('catas.json')
+//     .then(response => {
+//     return response.json();
+//     })
+//     .then(data => {
+//         data.map(cata => catas.push(cata))
+//         catas.forEach(element => {
+//             console.log(element)
+//         })
     
-})  
-    .catch(err => {
-        // Do something for an error here
-});
+// })  
+//     .catch(err => {
+//         // Do something for an error here
+// });
 
-function defineshape(s){
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-
-    // ctx.beginPath();
-    // ctx.moveTo(s.x1,s.y1);
-    // ctx.lineTo(s.x2,s.y2);
-    // ctx.closePath();
-    ctx.rect(s.x, s.y, s.width, s.height);
-    ctx.strokeRect(s.x, s.y, s.width, s.height);
+const dataContainer = document.querySelector('.infos');
+const updateData = event => {
+    dataContainer.style.display = 'block';
+    dataContainer.innerHTML = `<span>${event.deaths}</span> deaths from ${event.type} in <span>${event.year}</span>`;
+    
 }

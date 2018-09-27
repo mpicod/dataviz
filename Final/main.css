@@ -16,6 +16,8 @@ body{
     background-color: black;
     font-family: 'Helvetica Neue';
     color: white;
+    max-width: 100vw;
+    overflow: hidden;
 }
 canvas{
     display: block;
@@ -66,6 +68,7 @@ div.epidemic div{
     color: white;
     position: absolute;
     bottom: 115px;
+    transform: translateX(-50%);  /* récupère le décalage dû à la largeur de la div, pour que le before soit centré */
 }
 .timeline_step::before{
     content: '';
@@ -76,6 +79,9 @@ div.epidemic div{
     top: 50%;
     background-color: white;
     display: block;
+}
+.timeline_step:nth-child(3)::before{
+    display:none;
 }
 .timeline{
     width: 95vw;
@@ -91,6 +97,26 @@ div.epidemic div{
     border-radius: 50%;
     background-color: white;
     position: relative;
-    left: 0;
+    left: -10px;
     bottom: 400%;
+}
+
+.infos{
+    --left-cursor: 0;
+    --top-cursor: 0;
+    display: none;
+    font-weight: 300;
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    border: 2px solid white;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    padding: 1%;
+    top: 0;
+    left: 0;
+    transform: translateX(var(--left-cursor)) translateY(var(--top-cursor))
+}
+.infos span{
+    font-weight: 800;
 }
