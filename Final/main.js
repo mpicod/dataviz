@@ -279,7 +279,7 @@ function setupCanvas(){
     let rect = canvas.getBoundingClientRect();
     // Give the canvas pixel dimensions of their CSS
     // size * the device pixel ratio.
-    canvas.width = window.innerWidth * dpr;
+    canvas.width = 6002; //window.innerWidth * dpr
     canvas.height = window.innerHeight * dpr;
     
     // Scale all drawing operations by the dpr, so you
@@ -288,7 +288,7 @@ function setupCanvas(){
     draw()
     return ctx;
   }
-  window.addEventListener('resize', setupCanvas);
+//   window.addEventListener('resize', setupCanvas);
 
 //////// GET DATAS ///////
 fetch('deaths.json').then(response => {
