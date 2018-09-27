@@ -17,11 +17,11 @@ body{
     font-family: 'Helvetica Neue';
     color: white;
     max-width: 100vw;
-    overflow: hidden;
 }
 canvas{
     display: block;
     width: 100%;
+    overflow-x: scroll;
 }
 
 h1{

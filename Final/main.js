@@ -24,10 +24,12 @@ catas = [];
 timelineSteps = [];
 
 let cursor = 50;
+let isMouseOver = false;
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-canvas.addEventListener("mousemove", mouseMove);
+document.addEventListener("mousemove", mouseMove);
+// canvas.addEventListener("mouseleave", ()=>{isMouseOver == false; console.log('e'); draw()})
 
 
 class Rectangle {
@@ -51,14 +53,15 @@ class Rectangle {
         // if (this.isHover == true) {
             
         // }
+        console.log(isMouseOver)
         let width;
         let opacity;
-        if (this.isHover == true) {
-            
+        if (this.isHover == true) { 
+            opacity = 1.0;
+        }else if(isMouseOver == false){
             opacity = 1.0;
         }else{
-            width = this.width;
-            opacity = 0.6;
+            opacity = 0.5;
         }
 
         ctx.globalAlpha = opacity;
@@ -340,11 +343,12 @@ fetch('deaths.json').then(response => {
     //////// EVENTS
     function mouseMove(e) {
         const canvas = document.getElementById('canvas');
+        const dim = canvas.getBoundingClientRect();
         
         console.log('MOVE')
         canvas.removeEventListener('mousemove', mouseMove);
-        let isMouseOver = false
-        let mouseX = e.x;
+        isMouseOver = false;
+        let mouseX = e.x + window.scrollX;
         let mouseY = e.y;
 
         const infos = document.querySelector('.infos');
@@ -355,13 +359,13 @@ fetch('deaths.json').then(response => {
         
         setTimeout(() => {
             canvas.addEventListener('mousemove', mouseMove);
-        }, 100);
+        }, 10);
         allEvents.forEach(event => {
             for(var i=0;i<event.length;i++){
-                if (mouseX>= event[i].x && mouseX<= event[i].x + event[i].width) {
+                if (mouseX>= event[i].x && mouseX<= event[i].x + event[i].width && mouseY >= dim.y && mouseY <= dim.y + dim.height) {
                     console.log('EVENTHIIT')
                     event[i].isHover = true;
-                    console.log(event[i])
+                    isMouseOver = true;
                     updateData(event[i])
                 }else{
                     event[i].isHover = false;
@@ -398,7 +402,19 @@ fetch('deaths.json').then(response => {
 
 const dataContainer = document.querySelector('.infos');
 const updateData = event => {
+    let deaths = event.deaths;
+    switch (event.deaths) {
+        case (event.deaths > 10):
+            deaths = Math.floor
+            break;
+    
+        default:
+            break;
+    }
+    // if (event.deaths > 10) {
+    //     deaths =
+    // }
     dataContainer.style.display = 'block';
-    dataContainer.innerHTML = `<span>${event.deaths}</span> deaths from ${event.type} in <span>${event.year}</span>`;
+    dataContainer.innerHTML = `<span>${deaths}</span> deaths from ${event.type} in <span>${event.year}</span>`;
     
 }
