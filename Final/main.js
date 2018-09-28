@@ -78,7 +78,7 @@ const setRectangle = _ => {
     FloodsArray = [];
     floods.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
-                height = canvas.height*0.7/2,
+                height = canvas.height,
                 x = undefined,
                 y = 0,
                 type = el.Entity,
@@ -94,7 +94,7 @@ const setRectangle = _ => {
     VolcansArray = [];
     volcans.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
-                height = canvas.height*0.7/2,
+                height = canvas.height,
                 x = undefined,
                 y = 0,
                 type = el.Entity,
@@ -110,7 +110,7 @@ const setRectangle = _ => {
     EarthquakeArray = [];
     earthquake.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
-                height = canvas.height*0.7/2,
+                height = canvas.height,
                 x = undefined,
                 y = 0,
                 type = el.Entity,
@@ -126,7 +126,7 @@ const setRectangle = _ => {
     TemperatureArray = [];
     temperature.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
-                height = canvas.height*0.7/2,
+                height = canvas.height,
                 x = undefined,
                 y = 0,
                 type = el.Entity,
@@ -142,7 +142,7 @@ const setRectangle = _ => {
     WildfireArray = [];
     wildfire.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
-                height = canvas.height*0.7/2,
+                height = canvas.height,
                 x = undefined,
                 y = 0,
                 type = el.Entity,
@@ -158,7 +158,7 @@ const setRectangle = _ => {
     EpidemicArray = [];
     epidemic.forEach((el, i) => {
         let     width = (el.Deaths/10000)>4 ? el.Deaths/10000 : 4,
-                height = canvas.height*0.7/2,
+                height = canvas.height,
                 x = undefined,
                 y = 0,
                 type = el.Entity,
@@ -252,7 +252,8 @@ function addCursor(element){
 }
 
 function drawTimeline(){
-    const currentDiv = document.querySelector('footer'); 
+    const currentDiv = document.querySelector('.timeline'); 
+    const footer = document.querySelector('footer');
     timelineSteps.forEach((time, index) => {
         // document.write(`<span class="timeline_step" data-X="${time['step']}"></span>`)
           // crée un nouvel élément div 
@@ -265,7 +266,7 @@ function drawTimeline(){
             // ajoute le noeud texte au nouveau div créé
             newSpan.appendChild(newContent);  
             // ajoute le nouvel élément créé et son contenu dans le DOM 
-            document.body.insertBefore(newSpan, currentDiv); 
+            footer.insertBefore(newSpan, currentDiv); 
           }
     })
 }
@@ -280,7 +281,7 @@ function setupCanvas(){
     // Give the canvas pixel dimensions of their CSS
     // size * the device pixel ratio.
     canvas.width = 5500; //window.innerWidth * dpr
-    canvas.height = window.innerHeight * dpr;
+    canvas.height = window.innerHeight*0.6;
     
     // Scale all drawing operations by the dpr, so you
     // don't have to worry about the difference.
@@ -288,7 +289,7 @@ function setupCanvas(){
     draw()
     return ctx;
   }
-//   window.addEventListener('resize', setupCanvas);
+  window.addEventListener('resize', setupCanvas);
 
 //////// GET DATAS ///////
 fetch('deaths.json').then(response => {
@@ -421,12 +422,19 @@ const updateData = event => {
 
 
 document.addEventListener('wheel', onMouseWheel)
-const body = document.querySelector('body')
+const footer = document.querySelector('footer')
+
 function onMouseWheel(e){
-    console.log(e)
-    if (e.delta < 0 ) {
-        canvas.offsetX --
-    }else if(e.delta > 0){
-        canvas.offsetX ++
+    console.log(e.deltaY)
+    e.preventDefault()
+    if (e.deltaY > 0 ) {
+        console.log(e)
+        footer.scrollLeft = canvas.scrollLeft + e.deltaY * 10
+        console.log(e.deltaY)
+        console.log('Mouse ++')
+    }else if(e.deltaY < 0){
+        footer.scrollLeft = canvas.scrollLeft + e.deltaY * 10
+        console.log(e.deltaY)
+        console.log('Mouse --')
     }
 }

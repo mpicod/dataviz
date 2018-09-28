@@ -23,7 +23,8 @@ canvas{
     display: block;
     /* width: 100%; */
     overflow-x: scroll;
-    margin-top: 10%;
+    margin-top: 25vh;
+    cursor: crosshair;
 }
 
 header{
@@ -75,20 +76,20 @@ div.epidemic div{
 .timeline_step{
     color: white;
     position: absolute;
-    bottom: 115px;
+    bottom: 8.5vh;
     transform: translateX(-50%);  /* récupère le décalage dû à la largeur de la div, pour que le before soit centré */
 }
 .timeline_step::before{
     content: '';
     width: 2px;
-    height: 30px;
+    height: 2vh;
     position: relative;
     left: 50%;
     top: 50%;
     background-color: white;
     display: block;
 }
-.timeline_step:nth-child(4)::before{
+.timeline_step:nth-child(1)::before{
     display:none;
 }
 .timeline{
@@ -97,7 +98,7 @@ div.epidemic div{
     left: 50px;
     background-color: white;
     position: absolute;
-    bottom: 150px;
+    bottom: 11vh;
 }
 .timeline_start{
     width: 20px;
@@ -107,6 +108,7 @@ div.epidemic div{
     position: relative;
     left: -10px;
     bottom: 400%;
+    cursor: grab;
 }
 
 .infos{
