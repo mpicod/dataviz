@@ -403,20 +403,33 @@ fetch('deaths.json').then(response => {
 
 const dataContainer = document.querySelector('.infos');
 const updateData = event => {
+    console.log(event)
     let deaths = event.deaths;
-    switch (event.deaths) {
-        case (event.deaths > 10):
-            deaths = Math.floor
-            break;
-    
-        default:
-            break;
+    let type;
+    if (event.type == 'Epidemic') {
+        type = 'Épidémie'
     }
+    if (event.type == 'Flood') {
+        type = 'Inondations'
+    }
+    if (event.type == 'Earthquake') {
+        type = 'Tremblements de terre'
+    }
+    if (event.type == 'Volcanic activity') {
+        type = 'Éruptions volcaniques'
+    }
+    if (event.type == 'Extreme temperature') {
+        type = 'Températures extrêmes'
+    }
+    if (event.type == 'Wildfire') {
+        type = 'Incendies'
+    }
+
     // if (event.deaths > 10) {
     //     deaths =
     // }
     dataContainer.style.display = 'block';
-    dataContainer.innerHTML = `<span>${deaths}</span> deaths from ${event.type} in <span>${event.year}</span>`;
+    dataContainer.innerHTML = `Morts : <span>${deaths}</span> <br>Type : <span>${type}</span> <br>Année : <span>${event.year}</span>`;
     
 }
 
@@ -427,10 +440,9 @@ const html = document.querySelector('html')
 function onMouseWheel(e){
     e.preventDefault()
     if (e.deltaY > 0 ) {
-        html.scrollLeft = easeInOutQuad( html.scrollLeft + e.deltaY * 10)
+        html.scrollLeft = html.scrollLeft + e.deltaY * 50
     }else if(e.deltaY < 0){
-        html.scrollLeft = easeInOutQuad( html.scrollLeft + e.deltaY * 10)
+        html.scrollLeft = html.scrollLeft + e.deltaY * 50
     }
 }
 
-const easeInOutQuad = (t) => { return t<.5 ? 2*t*t : -1+(4-2*t)*t }
