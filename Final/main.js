@@ -279,12 +279,12 @@ function setupCanvas(){
     let rect = canvas.getBoundingClientRect();
     // Give the canvas pixel dimensions of their CSS
     // size * the device pixel ratio.
-    canvas.width = 6002; //window.innerWidth * dpr
+    canvas.width = 5500; //window.innerWidth * dpr
     canvas.height = window.innerHeight * dpr;
     
     // Scale all drawing operations by the dpr, so you
     // don't have to worry about the difference.
-    ctx.scale(dpr, dpr);
+    // ctx.scale(dpr, dpr);
     draw()
     return ctx;
   }
@@ -352,14 +352,14 @@ fetch('deaths.json').then(response => {
         let mouseY = e.y;
 
         const infos = document.querySelector('.infos');
-        infos.style.setProperty('--left-cursor', mouseX + 'px');
-        infos.style.setProperty('--top-cursor', mouseY + 'px');
+        infos.style.setProperty('--left-cursor', mouseX + 10 + 'px');
+        infos.style.setProperty('--top-cursor', mouseY +10 + 'px');
         infos.style.display = 'none';
 
         
         setTimeout(() => {
             canvas.addEventListener('mousemove', mouseMove);
-        }, 10);
+        }, 1);
         allEvents.forEach(event => {
             for(var i=0;i<event.length;i++){
                 if (mouseX>= event[i].x && mouseX<= event[i].x + event[i].width && mouseY >= dim.y && mouseY <= dim.y + dim.height) {
@@ -417,4 +417,16 @@ const updateData = event => {
     dataContainer.style.display = 'block';
     dataContainer.innerHTML = `<span>${deaths}</span> deaths from ${event.type} in <span>${event.year}</span>`;
     
+}
+
+
+document.addEventListener('wheel', onMouseWheel)
+const body = document.querySelector('body')
+function onMouseWheel(e){
+    console.log(e)
+    if (e.delta < 0 ) {
+        canvas.offsetX --
+    }else if(e.delta > 0){
+        canvas.offsetX ++
+    }
 }
