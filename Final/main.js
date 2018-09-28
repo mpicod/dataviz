@@ -422,19 +422,15 @@ const updateData = event => {
 
 
 document.addEventListener('wheel', onMouseWheel)
-const footer = document.querySelector('footer')
+const html = document.querySelector('html')
 
 function onMouseWheel(e){
-    console.log(e.deltaY)
     e.preventDefault()
     if (e.deltaY > 0 ) {
-        console.log(e)
-        footer.scrollLeft = canvas.scrollLeft + e.deltaY * 10
-        console.log(e.deltaY)
-        console.log('Mouse ++')
+        html.scrollLeft = easeInOutQuad( html.scrollLeft + e.deltaY * 10)
     }else if(e.deltaY < 0){
-        footer.scrollLeft = canvas.scrollLeft + e.deltaY * 10
-        console.log(e.deltaY)
-        console.log('Mouse --')
+        html.scrollLeft = easeInOutQuad( html.scrollLeft + e.deltaY * 10)
     }
 }
+
+const easeInOutQuad = (t) => { return t<.5 ? 2*t*t : -1+(4-2*t)*t }
